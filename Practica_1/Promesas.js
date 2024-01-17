@@ -1,11 +1,27 @@
-let promesaExitosa = new Promise((resolve, reject) => {
-    // Simulamos un error durante la operación
-    reject("La promesa fue rechazada");
-});
+const cargandoDatosDeAPI = (url) => {
+    return new Promise((resolve, reject) => {
+        // Simula una solicitud a una API
+        fetch(url).then(response => {
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            resolve(data);
+        })
+        .catch(error => {
+            reject(`Error al cargar datos: ${error.message}`);
+        });
+    });
+}
 
-// Manejar la promesa con error
-promesaExitosa.then((mensaje) => {
-    console.log(mensaje);
-}).catch((error) => {
-    console.log(error);
-});
+// Uso de la función para cargar datos de una API
+const apiUrl = 'https://fakestoreapi.com/products/1';
+cargandoDatosDeAPI(apiUrl)
+    .then(data => {
+        console.log("Datos cargados:",data);
+    })
+    .catch(error => {
+        console.log("Error:", error);
+    });
