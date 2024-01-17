@@ -1,9 +1,9 @@
 let promesaExitosa = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve("La operación fue exitosa");
-    }, 3000);
+    // Simulamos un error durante la operación
+    reject("La promesa fue rechazada");
 });
 
+// Manejar la promesa con error
 promesaExitosa.then((mensaje) => {
     console.log(mensaje);
 }).catch((error) => {
