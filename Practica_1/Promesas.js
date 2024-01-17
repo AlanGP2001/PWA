@@ -1,27 +1,17 @@
-const cargandoDatosDeAPI = (url) => {
+const ejecutarConTimeout = (ms) => {
     return new Promise((resolve, reject) => {
-        // Simula una solicitud a una API
-        fetch(url).then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            resolve(data);
-        })
-        .catch(error => {
-            reject(`Error al cargar datos: ${error.message}`);
-        });
+        // Simula una operación que toma cierto tiempo
+        setTimeout(() => {
+            resolve(`Operacion completa despues de ${ms} milisegundos`);
+        }, ms);
     });
-}
+};
 
-// Uso de la función para cargar datos de una API
-const apiUrl = 'https://fakestoreapi.com/products/1';
-cargandoDatosDeAPI(apiUrl)
-    .then(data => {
-        console.log("Datos cargados:",data);
-    })
-    .catch(error => {
-        console.log("Error:", error);
+// Uso de la función con timeout
+const tiempoLimite = 2000;
+ejecutarConTimeout(tiempoLimite)
+    .then((resultado) => {
+        console.log(resultado);
+    }).catch((error) => {
+        console.log(error);
     });
