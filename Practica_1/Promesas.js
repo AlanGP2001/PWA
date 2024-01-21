@@ -1,8 +1,15 @@
-function imprimirNumeroMasUno(numero) {
-    // Incrementa el número en uno y lo imprime en la consola
-    console.log(numero);
-    console.log(numero + 1);
-}
+// Definición de una función asíncrona
+const funcionAsincrona = async () => {
+    // Simula una operación asíncrona, por ejemplo, una espera de 2 segundos
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-// Ejemplo de uso de la función
-imprimirNumeroMasUno(5); // Esto imprimirá "6" en la consola
+    // Después de la espera, realiza alguna acción
+    console.log("Operación asíncrona completada");
+};
+
+// Llamada a la función asíncrona
+funcionAsincrona();
+
+// Este mensaje se imprimirá inmediatamente después de la llamada a la función,
+// ya que la función asíncrona no bloquea la ejecución del código.
+console.log("Fin del programa (antes de que la operación asíncrona se complete)");
