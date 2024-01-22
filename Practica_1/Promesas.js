@@ -16,14 +16,16 @@ const sumarRapido = (numero) => {
         // Simula una operación de suma rápida después de 300 milisegundos
         setTimeout(() => {
             resolve(numero + 1);
+            // Se podría utilizar reject para simular un error en la función
+            // reject(console.log("Error en función de sumar rapido"))
         }, 300);
     });
 }
 
-// Ejecuta ambas funciones de manera concurrente usando Promise.all
-Promise.all([sumarRapido(6), sumarLento(5), true, "Hola mundo"])
+// Promise.race compite entre las promesas y devuelve la respuesta que se resuelva más rápido
+Promise.race([sumarLento(5), sumarRapido(6)])
     .then(respuestas => {
-        // Imprime las respuestas obtenidas, que incluyen el resultado de las operaciones
+        // Imprime la respuesta que se resolvió más rápido
         console.log(respuestas);
     })
     .catch(console.log);
