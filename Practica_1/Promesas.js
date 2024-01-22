@@ -1,21 +1,29 @@
-// Función asíncrona que simula una tarea
-const tareaAsincrona = async (nombre) => {
-    console.log(`Inicio de la tarea ${nombre}`);
-    // Simula una espera de 2 segundos
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log(`Fin de la tarea ${nombre}`);
-};
+// Definición de una función asíncrona que simula una operación de suma lenta
+const sumarLento = (numero) => {
+    return new Promise((resolve, reject) => {
+        // Simula una operación de suma lenta después de 800 milisegundos
+        setTimeout(() => {
+            resolve(numero + 1);
+            // Se podría utilizar reject para simular un error en la función
+            // reject(console.log("Error en función de sumar lento"))
+        }, 800);
+    });
+}
 
-// Función principal que ejecuta las tareas de manera asíncrona
-const ejecutarTareasAsincronas = async () => {
-    console.log("Inicio del proceso");
+// Definición de una función asíncrona que simula una operación de suma rápida
+const sumarRapido = (numero) => {
+    return new Promise((resolve, reject) => {
+        // Simula una operación de suma rápida después de 300 milisegundos
+        setTimeout(() => {
+            resolve(numero + 1);
+        }, 300);
+    });
+}
 
-    // Usa await para ejecutar las tareas de manera secuencial
-    await tareaAsincrona("A");
-    await tareaAsincrona("B");
-
-    console.log("Fin del proceso");
-};
-
-// Llamada a la función principal para iniciar el proceso
-ejecutarTareasAsincronas();
+// Ejecuta ambas funciones de manera concurrente usando Promise.all
+Promise.all([sumarRapido(6), sumarLento(5), true, "Hola mundo"])
+    .then(respuestas => {
+        // Imprime las respuestas obtenidas, que incluyen el resultado de las operaciones
+        console.log(respuestas);
+    })
+    .catch(console.log);
