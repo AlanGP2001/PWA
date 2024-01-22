@@ -31,6 +31,7 @@ const promesaConTimeout = (promesa, tiempoLimite) => {
 const promesaLenta = new Promise(resolve => setTimeout(() => resolve("¡Promesa resuelta!"), 2000));
 
 // Llamada a la función para agregar timeout a la promesa
+// const tiempoLimite = 2000;
 const tiempoLimite = 1500;
 promesaConTimeout(promesaLenta, tiempoLimite)
     .then(resultado => {
