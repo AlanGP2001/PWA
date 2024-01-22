@@ -1,35 +1,41 @@
-// Función que realiza operaciones asincrónicas de forma secuencial
-const realizarOperacionesAsincronas = (funcionesPromesa) => {
-    // Inicializa una promesa que se resuelve inmediatamente
-    let promesaActual = Promise.resolve();
+/*
+    Crea una función promesaConTimeout que tome una promesa y un tiempo límite en milisegundos. 
+    La función debe resolver la promesa dentro del tiempo límite. Si la promesa no se resuelve 
+    en el tiempo especificado, debería rechazar con un mensaje indicando que se ha agotado el tiempo.
+*/
 
-    // Itera sobre las funciones de promesa
-    for (const funcion of funcionesPromesa) {
-        // Encadena la ejecución de las funciones de promesa de forma secuencial
-        promesaActual = promesaActual.then(funcion)
-            .catch((motivo) => {
-                // Si alguna promesa es rechazada, detiene la ejecución y rechaza la promesa
-                throw motivo;
-            });
-    }
+// Función que agrega un timeout a una promesa
+const promesaConTimeout = (promesa, tiempoLimite) => {
+    // Crea una nueva promesa con la lógica de timeout
+    return new Promise((resolve, reject) => {
+        // Configura un temporizador para el tiempo límite
+        const timeout = setTimeout(() => {
+            // Si la promesa no se resuelve dentro del tiempo especificado, rechaza con un mensaje
+            reject(`Tiempo de espera agotado (${tiempoLimite} ms)`);
+        }, tiempoLimite);
 
-    // Devuelve la promesa final resultante de la ejecución secuencial
-    return promesaActual;
+        // Ejecuta la promesa original
+        promesa.then((resultado) => {
+            // Si la promesa se resuelve, limpia el temporizador y resuelve la nueva promesa
+            clearTimeout(timeout);
+            resolve(resultado);
+        }).catch((error) => {
+            // Si la promesa es rechazada, limpia el temporizador y rechaza la nueva promesa con el mismo error
+            clearTimeout(timeout);
+            reject(error);
+        });
+    });
 };
 
 // Ejemplo de uso:
-const operacion1 = () => new Promise(resolve => setTimeout(() => resolve(1), 1000));
-const operacion2 = () => new Promise(resolve => setTimeout(() => resolve(2), 500));
-const operacion3 = () => new Promise((resolve, reject) => setTimeout(() => reject("Error en operacion3"), 700));
+const promesaLenta = new Promise(resolve => setTimeout(() => resolve("¡Promesa resuelta!"), 2000));
 
-const operaciones = [operacion1, operacion2, operacion3];
-
-// Llamada a la función para realizar las operaciones de forma secuencial
-realizarOperacionesAsincronas(operaciones)
-    .then(resultados => {
-        console.log("Operaciones completadas con éxito:", resultados);
+// Llamada a la función para agregar timeout a la promesa
+const tiempoLimite = 1500;
+promesaConTimeout(promesaLenta, tiempoLimite)
+    .then(resultado => {
+        console.log("Operación completada:", resultado);
     })
     .catch(error => {
-        console.error("Error durante las operaciones:", error);
+        console.error("Error:", error);
     });
-    
