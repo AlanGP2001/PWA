@@ -1,41 +1,34 @@
 /*
-    Crea una función realizarOperacionesAsincronas que toma un array de funciones que devuelven promesas. 
-    La función debe ejecutar estas operaciones de forma secuencial, resolviendo cada promesa antes de 
-    pasar a la siguiente. Si alguna promesa es rechazada, la función debe detenerse y rechazar con el motivo.
+    Crea una función esperarNVeces que tome un número n y devuelva una promesa. Esta promesa debe resolverse con el mensaje 
+    "¡He esperado N veces!" después de esperar 1 segundo por cada número del 1 al n. Por ejemplo, si n es 3, la promesa 
+    debería resolvere después de esperar 1 segundo, luego 2 segundos, y finalmente 3 segundos.
 */
 
-// Función que realiza operaciones asincrónicas de forma secuencial
-const realizarOperacionesAsincronas = (funcionesPromesa) => {
-    // Inicializa una promesa que se resuelve inmediatamente
-    let promesaActual = Promise.resolve();
-
-    // Itera sobre las funciones de promesa
-    for (const funcion of funcionesPromesa) {
-        // Encadena la ejecución de las funciones de promesa de forma secuencial
-        promesaActual = promesaActual.then(funcion)
-            .catch((motivo) => {
-                // Si alguna promesa es rechazada, detiene la ejecución y rechaza la promesa
-                throw motivo;
-            });
+// Función que devuelve una promesa después de esperar 1 segundo por cada número del 1 al n
+const esperarNVeces = (n) => {
+    // Validación para asegurarse de que n sea un número entero positivo
+    if (typeof n !== 'number' || !Number.isInteger(n) || n < 1) {
+        return Promise.reject("El argumento debe ser un número entero positivo mayor que cero.");
     }
 
-    // Devuelve la promesa final resultante de la ejecución secuencial
-    return promesaActual;
+    // Array de promesas para esperar 1 segundo por cada número del 1 al n
+    const promesas = Array.from({ length: n }, (_, index) => {
+        const espera = index + 1; // Tiempo de espera en segundos
+        return new Promise(resolve => setTimeout(() => resolve(`¡He esperado ${espera} veces!`), espera * 1000));
+    });
+
+    // Devuelve una promesa que se resuelve después de esperar todas las veces
+    return Promise.all(promesas);
 };
 
 // Ejemplo de uso:
-const operacion1 = () => new Promise(resolve => setTimeout(() => resolve(1), 1000));
-const operacion2 = () => new Promise(resolve => setTimeout(() => resolve(2), 500));
-const operacion3 = () => new Promise((resolve, reject) => setTimeout(() => reject("Error en operacion3"), 700));
+const vecesAesperar = 3;
 
-const operaciones = [operacion1, operacion2, operacion3];
-
-// Llamada a la función para realizar las operaciones de forma secuencial
-realizarOperacionesAsincronas(operaciones)
+// Llamada a la función para esperar N veces
+esperarNVeces(vecesAesperar)
     .then(resultados => {
-        console.log("Operaciones completadas con éxito:", resultados);
+        resultados.forEach(resultado => console.log(resultado));
     })
     .catch(error => {
-        console.error("Error durante las operaciones:", error);
+        console.error("Error:", error);
     });
-    
