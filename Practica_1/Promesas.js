@@ -1,3 +1,9 @@
+/*
+    Crea una función realizarOperacionesAsincronas que toma un array de funciones que devuelven promesas. 
+    La función debe ejecutar estas operaciones de forma secuencial, resolviendo cada promesa antes de 
+    pasar a la siguiente. Si alguna promesa es rechazada, la función debe detenerse y rechazar con el motivo.
+*/
+
 // Función que realiza operaciones asincrónicas de forma secuencial
 const realizarOperacionesAsincronas = (funcionesPromesa) => {
     // Inicializa una promesa que se resuelve inmediatamente
