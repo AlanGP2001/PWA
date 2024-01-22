@@ -1,31 +1,35 @@
-// Definición de una función asíncrona que simula una operación de suma lenta
-const sumarLento = (numero) => {
-    return new Promise((resolve, reject) => {
-        // Simula una operación de suma lenta después de 800 milisegundos
-        setTimeout(() => {
-            resolve(numero + 1);
-            // Se podría utilizar reject para simular un error en la función
-            // reject(console.log("Error en función de sumar lento"))
-        }, 800);
-    });
-}
+// Función que realiza operaciones asincrónicas de forma secuencial
+const realizarOperacionesAsincronas = (funcionesPromesa) => {
+    // Inicializa una promesa que se resuelve inmediatamente
+    let promesaActual = Promise.resolve();
 
-// Definición de una función asíncrona que simula una operación de suma rápida
-const sumarRapido = (numero) => {
-    return new Promise((resolve, reject) => {
-        // Simula una operación de suma rápida después de 300 milisegundos
-        setTimeout(() => {
-            resolve(numero + 1);
-            // Se podría utilizar reject para simular un error en la función
-            // reject(console.log("Error en función de sumar rapido"))
-        }, 300);
-    });
-}
+    // Itera sobre las funciones de promesa
+    for (const funcion of funcionesPromesa) {
+        // Encadena la ejecución de las funciones de promesa de forma secuencial
+        promesaActual = promesaActual.then(funcion)
+            .catch((motivo) => {
+                // Si alguna promesa es rechazada, detiene la ejecución y rechaza la promesa
+                throw motivo;
+            });
+    }
 
-// Promise.race compite entre las promesas y devuelve la respuesta que se resuelva más rápido
-Promise.race([sumarLento(5), sumarRapido(6)])
-    .then(respuestas => {
-        // Imprime la respuesta que se resolvió más rápido
-        console.log(respuestas);
+    // Devuelve la promesa final resultante de la ejecución secuencial
+    return promesaActual;
+};
+
+// Ejemplo de uso:
+const operacion1 = () => new Promise(resolve => setTimeout(() => resolve(1), 1000));
+const operacion2 = () => new Promise(resolve => setTimeout(() => resolve(2), 500));
+const operacion3 = () => new Promise((resolve, reject) => setTimeout(() => reject("Error en operacion3"), 700));
+
+const operaciones = [operacion1, operacion2, operacion3];
+
+// Llamada a la función para realizar las operaciones de forma secuencial
+realizarOperacionesAsincronas(operaciones)
+    .then(resultados => {
+        console.log("Operaciones completadas con éxito:", resultados);
     })
-    .catch(console.log);
+    .catch(error => {
+        console.error("Error durante las operaciones:", error);
+    });
+    
