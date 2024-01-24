@@ -1,5 +1,5 @@
 // Manejo de errores
-fetch('https://fakestoreapi.com/products/-1')
+fetch('https://fakestoreapi.com/products/1')
   .then(response => {
     response.json().then(console.log)
   })
