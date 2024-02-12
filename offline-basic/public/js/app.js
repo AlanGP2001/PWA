@@ -25,13 +25,13 @@ if (window.caches) {
             'logo512.png',
             '/pages/offline.html',
         ]).then(() => {
-            // borra un archivo del cache
-            cache.delete('logo192.png');
+            // Interceptar un archivo por otro
+            cache.put('index.html', new Response('Interceptado por otro archivo'));
         });
 
-        // Verificar si existe un archivo en el cache
-        cache.match('index.html').then(res => {
-            res.text().then(console.log);
+        // Obtener todos los archivos del cache
+        cache.keys().then(keys => {
+            console.log(keys);
         });
 
     });
