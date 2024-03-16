@@ -13,7 +13,17 @@ const actualizaCacheDinamico = (dynamicCache, req, res) => {
     }
 }
 
-function manejoApiNotas(cacheName, req) {
+const actualizaCacheStatico = (estaticoCache, req, APP_SHELL_INMUTABLE) => {
+    if (APP_SHELL_INMUTABLE.includes(req.url)) {
+        // No hace falta actualizar el inmutable
+    } else {
+        return fetch(req).then(res => {
+            return actualizaCacheDinamico(estaticoCache, req, res);
+        });
+    }
+}
+
+const manejoApiNotas = (cacheName, req) => {
 
     if (req.clone().method === 'POST') {
         //ejecutar post

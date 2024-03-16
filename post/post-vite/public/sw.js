@@ -1,6 +1,6 @@
 importScripts('https://cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js')
-importScripts('js/sw-db.js')
-importScripts('js/sw-utils.js')
+importScripts('js/sw-bd.js')
+importScripts('/js/sw-utils.js')
 //Crear las variables de cache
 const CACHE_DYNAMIC = 'dynamic-v1' //Para los archivos que se van a descargar
 const CACHE_STATIC = 'static-v3'    //App shell
@@ -30,13 +30,13 @@ self.addEventListener('install', event => {
 
             '/',
             '/index.html',
-            '/js/app.js',
-            '/js/sw-utils.js',
-            '/sw.js',
-            'vite.svg',
-            '/assets/index-DqfkWRLQ.js',
+            '/assets/index-BGrJtFP0.js',
             '/assets/index-HeeXXGra.css',
-            // 'manifest.json',
+            '/sw.js',
+            '/js/sw-utils.js',
+            '/js/sw-bd.js',
+            '/js/app.js',
+            'vite.svg',
         ])
     })
     const caheInmutable = caches.open(CACHE_INMUTABLE).then(cache => {
@@ -78,7 +78,8 @@ self.addEventListener('fetch', event => {
         respuesta = caches.match(event.request).then(res => {
             //si existe en cache lo regresa
             if (res) {
-                return res
+                actualizaCacheStatico(CACHE_STATIC, event.request, CACHE_INMUTABLE)
+                return res;
             } else {
                 //No existen archivos
                 // console.log(event.request.url)
@@ -94,10 +95,10 @@ self.addEventListener('fetch', event => {
 })
 
 //Tareas asincronas
-self.addEventListener('sync', e => {
+self.addEventListener('sync', event => {
     console.log('SW:sync');
-    if (e.tag === 'nuevo-post') {
+    if (event.tag === 'nueva-post') {
         const respuesta = postearNotas();
-        e.waitUntil(respuesta);
+        event.waitUntil(respuesta);
     }
 })
