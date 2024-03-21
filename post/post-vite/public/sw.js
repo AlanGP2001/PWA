@@ -1,6 +1,8 @@
 importScripts('https://cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js')
 importScripts('js/sw-bd.js')
-importScripts('/js/sw-utils.js')
+importScripts('js/sw-utils.js')
+importScripts('firebase-messaging-sw.js')
+
 //Crear las variables de cache
 const CACHE_DYNAMIC = 'dynamic-v1' //Para los archivos que se van a descargar
 const CACHE_STATIC = 'static-v3'    //App shell
@@ -44,8 +46,8 @@ self.addEventListener('install', event => {
         return cache.addAll([
             'https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Roboto:wght@100&display=swap',
             'https://cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js',
-            'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js',
-            'https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js'
+            'https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js',
+            'https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging-compat.js'
         ])
     })
     event.waitUntil(Promise.all([cahePromise, caheInmutable]))

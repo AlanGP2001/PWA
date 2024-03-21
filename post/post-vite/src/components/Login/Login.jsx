@@ -7,10 +7,10 @@ const Login = () => {
     const login = () => {
         signInAnonymously(getAuth())
             .then((user) => {
-                console.log('signInAnonymously: ', user)
+                console.log('signInAnonymously Susses: ', user)
             })
             .catch((error) => {
-                console.log('signInAnonymously: ', error)
+                console.log('signInAnonymously Error: ', error)
             });
     }
 

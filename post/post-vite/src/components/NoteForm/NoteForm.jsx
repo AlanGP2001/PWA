@@ -14,13 +14,14 @@ const NoteForm = () => {
 
     const getTokenNotificacion = async () => {
         const token = await getToken(messaging, {
-            vapidKey: 'BEQ2ibOu5QvQ7Npsm1zI0XYxd3fj2knlFIgv87TqIsB4V5fm8pUkKNsvHkhb4bZ1ieGMZ7q1WF7xJ8ErmecjdFY'
+            vapidKey: 'BKzRa_IiOHb5PAklyDe0oDaA98WqE0-5my8Ou0lSRcfxlJ7GkL6yp-kEH2FXFf20a6sxS1juE5-KS0Vj738I2lM'
         }).catch((error) => console.log('No se pudo obtener el token', error));
 
         if (token) {
             console.log('Token:', token);
         } else {
             console.log('No se pudo obtener el token');
+            console.log('Permiso:', Notification.permission);
         }
     };
 
@@ -30,8 +31,10 @@ const NoteForm = () => {
             return;
         }
         if (Notification.permission === 'granted') {
-            getTokenNotificacion();            
+            console.log('Permiso ya concedido', Notification.permission);
+            getTokenNotificacion();
         } else if (Notification.permission !== 'denied' || Notification.permission === 'default') {
+            console.log('Solicitando permiso', Notification.permission);
             Notification.requestPermission((permission) => {
                 console.log(permission);
                 if (permission === 'granted') {
@@ -79,13 +82,13 @@ const NoteForm = () => {
                 },
                 body: JSON.stringify(data)
             }).then(res => res.json())
-            .then(res => {
-                const nuevaNota = res;
-                setNotes([...notes, nuevaNota]);
-                console.log('Nota enviada ...:', values);
-                form.resetFields();
-            })
-           
+                .then(res => {
+                    const nuevaNota = res;
+                    setNotes([...notes, nuevaNota]);
+                    console.log('Nota enviada ...:', values);
+                    form.resetFields();
+                })
+
         } catch (error) {
             console.error('Error al guardar la nota:', error);
         }
@@ -93,7 +96,7 @@ const NoteForm = () => {
 
     return (
         <div className='container'>
-            
+
             <ToastContainer />
 
             <Header />
@@ -105,7 +108,7 @@ const NoteForm = () => {
                 wrapperCol={{ flex: 1 }}
                 colon={false}
                 style={{ maxWidth: 800, marginTop: '30px' }}
-                >
+            >
                 <Form.Item
                     name="title"
                     rules={[
@@ -114,7 +117,7 @@ const NoteForm = () => {
                             message: 'Por favor, ingresa un título',
                         },
                     ]}
-                    >
+                >
                     <Input placeholder="Título" />
                 </Form.Item>
 
@@ -126,7 +129,7 @@ const NoteForm = () => {
                             message: 'Por favor, ingresa el contenido de tu nota',
                         },
                     ]}
-                    >
+                >
                     <Input placeholder="Post" />
                 </Form.Item>
 
@@ -139,7 +142,7 @@ const NoteForm = () => {
             <MiLista notes={notes} />
         </div>
 
-);
+    );
 };
 
 export default NoteForm;
